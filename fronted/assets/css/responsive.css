@@ -1,0 +1,331 @@
+@media (max-width: 1220px) {
+  :root {
+    --page-padding: 22px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-2,
+  .grid-2--uneven,
+  .grid-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .detail-layout {
+    grid-template-columns: minmax(0, 1fr) 290px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition);
+    box-shadow: var(--shadow-lg);
+  }
+
+  body.nav-open .sidebar {
+    transform: none;
+  }
+
+  .app-frame {
+    margin-left: 0;
+  }
+
+  .mobile-menu {
+    display: inline-flex;
+  }
+
+  .sidebar-close {
+    display: inline-flex;
+  }
+
+  .topbar {
+    padding: 0 20px;
+  }
+
+  .detail-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .login-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .login-aside {
+    display: none;
+  }
+
+  .login-main {
+    min-height: 100vh;
+    padding: 36px 24px;
+  }
+
+  .login-panel-head {
+    display: flex;
+  }
+
+  .login-foot {
+    margin-top: 22px;
+  }
+}
+
+@media (max-width: 820px) {
+  .topbar-search {
+    display: none;
+  }
+
+  .topbar-title p {
+    display: none;
+  }
+
+  .page-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar-divider {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --page-padding: 16px;
+    --topbar-height: 60px;
+  }
+
+  .page {
+    gap: 16px;
+  }
+
+  .page-head h2 {
+    font-size: 21px;
+  }
+
+  .page-head p {
+    font-size: 12.5px;
+  }
+
+  .topbar {
+    gap: 8px;
+    padding: 0 14px;
+  }
+
+  .topbar-actions {
+    gap: 6px;
+  }
+
+  .topbar-actions .btn {
+    padding: 0 10px;
+  }
+
+  .topbar-actions .btn-label {
+    display: none;
+  }
+
+  .user-chip-meta {
+    display: none;
+  }
+
+  .user-chip > svg {
+    display: none;
+  }
+
+  .stats-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 23px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .search-field {
+    max-width: none;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filters .select {
+    flex: 1;
+    min-width: 118px;
+  }
+
+  .filters .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .table-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .pagination-controls {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .modal-backdrop {
+    padding: 16px 12px;
+  }
+
+  .modal {
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 16px 16px 14px;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .modal-footer {
+    padding-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .modal-footer .btn {
+    flex: 1;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .span-2 {
+    grid-column: auto;
+  }
+
+  .detail-title {
+    font-size: 19px;
+  }
+
+  .detail-title-row {
+    flex-direction: column;
+  }
+
+  .detail-actions {
+    width: 100%;
+  }
+
+  .detail-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .confirm-body {
+    padding: 16px;
+  }
+
+  .card-header {
+    padding: 15px 16px;
+  }
+
+  .card-body {
+    padding: 16px;
+  }
+
+  .timeline {
+    padding: 16px;
+  }
+
+  .comment {
+    padding: 14px 16px;
+  }
+
+  .comment-form {
+    padding: 14px 16px;
+  }
+
+  .detail-props {
+    padding: 4px 16px;
+  }
+
+  .quick-actions {
+    padding: 14px 16px;
+  }
+
+  .workload-item {
+    padding: 12px 16px;
+  }
+
+  .toast-stack {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100% - 24px);
+  }
+
+  .chart-box {
+    height: 240px;
+  }
+
+  .chart-box--lg {
+    height: 260px;
+  }
+
+  .login-main {
+    padding: 28px 20px;
+  }
+
+  .login-title {
+    font-size: 22px;
+  }
+
+  .demo-card {
+    padding: 12px;
+  }
+
+  .row-between {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .data-table {
+    min-width: 780px;
+  }
+}
+
+@media (max-width: 420px) {
+  .filters .select {
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+
+  .filters .btn {
+    flex-basis: 100%;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+  }
+
+  .login-aside-footer {
+    gap: 20px;
+  }
+}

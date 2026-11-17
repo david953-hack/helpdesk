@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle de solicitud · HelpDesk</title>
+    <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/variables.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+  </head>
+  <body data-page="ticket-detail">
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+      <div class="app-overlay" id="app-overlay"></div>
+
+      <div class="app-frame">
+        <header class="topbar" id="topbar"></header>
+
+        <main class="page">
+          <div class="detail-head">
+            <a class="detail-back" href="tickets.html">
+              <i data-lucide="arrow-left"></i>Volver a solicitudes
+            </a>
+            <div id="detail-head-content"></div>
+          </div>
+
+          <div class="detail-layout" id="detail-layout">
+            <div class="detail-main">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Descripción</h3>
+                    <p class="card-subtitle">Detalle aportado por el solicitante</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p class="prose" id="ticket-description"></p>
+                </div>
+              </div>
+
+              <div class="card card--flush">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Conversación</h3>
+                    <p class="card-subtitle" id="comments-count">Sin comentarios todavía</p>
+                  </div>
+                </div>
+                <div class="comment-list" id="comments-list"></div>
+                <form class="comment-form" id="comment-form" novalidate>
+                  <div class="field" style="width: 100%">
+                    <label class="sr-only" for="comment-message">Comentario</label>
+                    <textarea
+                      class="textarea"
+                      id="comment-message"
+                      rows="3"
+                      placeholder="Escribe un comentario o una actualización…"
+                    ></textarea>
+                    <span class="field-error"></span>
+                  </div>
+                  <div class="comment-form-actions">
+                    <span class="comment-form-hint">Los comentarios quedan registrados en el historial.</span>
+                    <button type="submit" class="btn btn--primary btn--sm" id="comment-submit">
+                      <i data-lucide="send"></i>Enviar comentario
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Historial de actividad</h3>
+                    <p class="card-subtitle">Todos los cambios registrados en la solicitud</p>
+                  </div>
+                </div>
+                <div class="timeline" id="timeline"></div>
+              </div>
+            </div>
+
+            <aside class="detail-side">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Detalles</h3>
+                    <p class="card-subtitle">Información de la solicitud</p>
+                  </div>
+                </div>
+                <div class="detail-props" id="detail-props"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Acciones rápidas</h3>
+                    <p class="card-subtitle">Actualiza el seguimiento al instante</p>
+                  </div>
+                </div>
+                <div class="quick-actions">
+                  <div class="field">
+                    <label for="quick-status">Estado de la solicitud</label>
+                    <select class="select" id="quick-status"></select>
+                  </div>
+                  <div class="field">
+                    <label for="quick-technician">Técnico asignado</label>
+                    <select class="select" id="quick-technician"></select>
+                  </div>
+                  <p class="field-hint">Los cambios se guardan automáticamente.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <div class="card" id="detail-empty" hidden>
+            <div class="empty-state">
+              <span class="empty-state-icon"><i data-lucide="file-question"></i></span>
+              <p class="empty-state-title">Solicitud no encontrada</p>
+              <p class="empty-state-text">
+                El enlace no es válido o la solicitud fue eliminada. Vuelve al listado para
+                consultar las solicitudes disponibles.
+              </p>
+              <a class="btn btn--primary" href="tickets.html" style="margin-top: 8px">
+                <i data-lucide="arrow-left"></i>Ir a solicitudes
+              </a>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="detail-edit-modal" aria-hidden="true">
+      <div class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="detail-edit-title">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="detail-edit-title">Editar solicitud</h3>
+            <p class="modal-subtitle" id="detail-edit-subtitle">Actualiza la información de la solicitud.</p>
+          </div>
+          <button type="button" class="icon-btn" data-modal-close aria-label="Cerrar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-body" id="detail-edit-form" novalidate>
+          <div class="form-grid">
+            <div class="field span-2">
+              <label for="edit-title">Título de la solicitud <span class="req">*</span></label>
+              <input class="input" id="edit-title" type="text" />
+              <span class="field-error"></span>
+            </div>
+            <div class="field span-2">
+              <label for="edit-description">Descripción <span class="req">*</span></label>
+              <textarea class="textarea" id="edit-description" rows="4"></textarea>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="edit-user">Solicitante <span class="req">*</span></label>
+              <select class="select" id="edit-user"></select>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="edit-category">Categoría <span class="req">*</span></label>
+              <select class="select" id="edit-category"></select>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="edit-priority">Prioridad</label>
+              <select class="select" id="edit-priority"></select>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="edit-status">Estado</label>
+              <select class="select" id="edit-status"></select>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="edit-technician">Técnico asignado</label>
+              <select class="select" id="edit-technician"></select>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="edit-due">Fecha límite</label>
+              <input class="input" id="edit-due" type="date" />
+              <span class="field-error"></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn--secondary" data-modal-close>Cancelar</button>
+            <button type="submit" class="btn btn--primary" id="edit-submit">
+              <i data-lucide="check"></i>Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/services/auth.service.js"></script>
+    <script src="../assets/js/services/tickets.service.js"></script>
+    <script src="../assets/js/services/users.service.js"></script>
+    <script src="../assets/js/services/technicians.service.js"></script>
+    <script src="../assets/js/services/categories.service.js"></script>
+    <script src="../assets/js/services/stats.service.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/ticket-detail.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>

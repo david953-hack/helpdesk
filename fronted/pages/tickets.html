@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solicitudes · HelpDesk</title>
+    <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/variables.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+  </head>
+  <body data-page="tickets">
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+      <div class="app-overlay" id="app-overlay"></div>
+
+      <div class="app-frame">
+        <header class="topbar" id="topbar"></header>
+
+        <main class="page">
+          <div class="page-head">
+            <div>
+              <h2>Solicitudes</h2>
+              <p>Administra el ciclo completo de las solicitudes de soporte.</p>
+            </div>
+            <div class="page-head-actions">
+              <button type="button" class="btn btn--secondary" id="export-tickets">
+                <i data-lucide="download"></i>Exportar CSV
+              </button>
+              <button type="button" class="btn btn--primary" id="new-ticket-btn">
+                <i data-lucide="plus"></i>Nueva solicitud
+              </button>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="toolbar">
+              <div class="search-field">
+                <i data-lucide="search"></i>
+                <input
+                  class="input"
+                  id="ticket-search"
+                  type="search"
+                  placeholder="Buscar por título, código, solicitante o técnico…"
+                  aria-label="Buscar solicitudes"
+                />
+              </div>
+              <div class="filters">
+                <label class="sr-only" for="filter-status">Estado</label>
+                <select class="select" id="filter-status">
+                  <option value="all">Todos los estados</option>
+                </select>
+                <label class="sr-only" for="filter-priority">Prioridad</label>
+                <select class="select" id="filter-priority">
+                  <option value="all">Todas las prioridades</option>
+                </select>
+                <label class="sr-only" for="filter-category">Categoría</label>
+                <select class="select" id="filter-category">
+                  <option value="all">Todas las categorías</option>
+                </select>
+                <label class="sr-only" for="filter-technician">Técnico</label>
+                <select class="select" id="filter-technician">
+                  <option value="all">Todos los técnicos</option>
+                </select>
+                <button type="button" class="btn btn--ghost btn--sm" id="clear-filters">
+                  <i data-lucide="x"></i>Limpiar
+                </button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table" id="tickets-table">
+                <thead>
+                  <tr>
+                    <th class="sortable" data-sort="code" scope="col">
+                      Código<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="sortable" data-sort="title" scope="col">
+                      Solicitud<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="sortable" data-sort="user" scope="col">
+                      Solicitante<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="sortable" data-sort="technician" scope="col">
+                      Técnico<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="sortable" data-sort="priority" scope="col">
+                      Prioridad<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="sortable" data-sort="status" scope="col">
+                      Estado<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="sortable" data-sort="updatedAt" scope="col">
+                      Actualizado<span class="sort-indicator"><i data-lucide="chevrons-up-down"></i></span>
+                    </th>
+                    <th class="th-actions" scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tickets-body"></tbody>
+              </table>
+            </div>
+
+            <div class="table-footer" id="tickets-footer"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="ticket-modal" aria-hidden="true">
+      <div class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="ticket-modal-title">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="ticket-modal-title">Nueva solicitud</h3>
+            <p class="modal-subtitle" id="ticket-modal-subtitle">
+              Registra una nueva incidencia o petición de soporte.
+            </p>
+          </div>
+          <button type="button" class="icon-btn" data-modal-close aria-label="Cerrar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-body" id="ticket-form" novalidate>
+          <div class="form-grid">
+            <div class="field span-2">
+              <label for="ticket-title">Título de la solicitud <span class="req">*</span></label>
+              <input class="input" id="ticket-title" type="text" placeholder="Resume el problema en una frase" />
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field span-2">
+              <label for="ticket-description">Descripción <span class="req">*</span></label>
+              <textarea
+                class="textarea"
+                id="ticket-description"
+                rows="4"
+                placeholder="Describe el problema, cuándo empezó y a quién afecta…"
+              ></textarea>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="ticket-user">Solicitante <span class="req">*</span></label>
+              <select class="select" id="ticket-user"></select>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="ticket-category">Categoría <span class="req">*</span></label>
+              <select class="select" id="ticket-category"></select>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="ticket-priority">Prioridad</label>
+              <select class="select" id="ticket-priority"></select>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="ticket-status">Estado</label>
+              <select class="select" id="ticket-status"></select>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="ticket-technician">Técnico asignado</label>
+              <select class="select" id="ticket-technician"></select>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="ticket-due">Fecha límite</label>
+              <input class="input" id="ticket-due" type="date" />
+              <span class="field-error"></span>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn--secondary" data-modal-close>Cancelar</button>
+            <button type="submit" class="btn btn--primary" id="ticket-submit">
+              <i data-lucide="check"></i>Crear solicitud
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/services/auth.service.js"></script>
+    <script src="../assets/js/services/tickets.service.js"></script>
+    <script src="../assets/js/services/users.service.js"></script>
+    <script src="../assets/js/services/technicians.service.js"></script>
+    <script src="../assets/js/services/categories.service.js"></script>
+    <script src="../assets/js/services/stats.service.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/tickets.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>
