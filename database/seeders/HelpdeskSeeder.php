@@ -18,14 +18,21 @@ class HelpdeskSeeder extends Seeder
             Category::firstOrCreate(['name' => $name]);
         }
 
-        User::firstOrCreate(
-            ['email' => 'admin@helpdesk.com'],
-            [
-                'name' => 'Administrador',
-                'password' => Hash::make('admin123'),
-                'role' => 'admin',
-                'email_verified_at' => now(),
-            ],
-        );
+        foreach ([
+            ['name' => 'Administrador', 'email' => 'admin@helpdesk.com', 'password' => 'admin123', 'role' => 'admin'],
+            ['name' => 'Sofía Ramírez', 'email' => 'agente@helpdesk.com', 'password' => 'agente123', 'role' => 'tecnico'],
+            ['name' => 'Laura Martín', 'email' => 'laura@helpdesk.com', 'password' => 'usuario123', 'role' => 'usuario'],
+            ['name' => 'Carlos Ruiz', 'email' => 'carlos@helpdesk.com', 'password' => 'usuario123', 'role' => 'usuario'],
+        ] as $account) {
+            User::firstOrCreate(
+                ['email' => $account['email']],
+                [
+                    'name' => $account['name'],
+                    'password' => Hash::make($account['password']),
+                    'role' => $account['role'],
+                    'email_verified_at' => now(),
+                ],
+            );
+        }
     }
 }

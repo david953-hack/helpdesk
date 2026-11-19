@@ -141,7 +141,7 @@
                   <a class="icon-btn" href="{{ route('tickets.show', $ticket['id']) }}" title="Ver detalle" aria-label="Ver detalle">
                     <i data-lucide="eye"></i>
                   </a>
-                  <a class="icon-btn" href="{{ route('tickets.show', $ticket['id']) }}#editar" title="Editar" aria-label="Editar">
+                  <a class="icon-btn" href="{{ route('tickets.edit', $ticket['id']) }}" title="Editar" aria-label="Editar">
                     <i data-lucide="pencil"></i>
                   </a>
                   <form action="{{ route('tickets.destroy', $ticket['id']) }}" method="POST" onsubmit="return confirm('¿Eliminar la solicitud {{ $ticket['code'] }}?');">
@@ -280,11 +280,6 @@
             @error('technician_id')<span class="field-error">{{ $message }}</span>@enderror
           </div>
 
-          <div class="field">
-            <label for="ticket-due">Fecha límite</label>
-            <input class="input" id="ticket-due" name="due_date" type="date" value="{{ old('due_date') }}" />
-            @error('due_date')<span class="field-error">{{ $message }}</span>@enderror
-          </div>
         </div>
 
         <div class="modal-footer">

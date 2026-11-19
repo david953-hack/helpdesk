@@ -1,3 +1,12 @@
+@php
+  $currentUser = auth()->user();
+  $roleLabel = match ($currentUser->role) {
+    'admin' => 'Administrador',
+    'tecnico' => 'Técnico',
+    default => 'Usuario',
+  };
+  $activeCount = \App\Models\Ticket::whereIn('status', \App\Support\TicketPresenter::ACTIVE_STATUSES)->count();
+@endphp
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -37,13 +46,13 @@
           <a class="nav-item {{ ($active ?? '') === 'tickets' ? 'is-active' : '' }}" href="{{ route('tickets.index') }}" @if(($active ?? '') === 'tickets') aria-current="page" @endif>
             <i data-lucide="ticket"></i>
             <span>Solicitudes</span>
-            <span class="nav-badge">{{ \App\Support\HelpdeskData::stats(\App\Support\HelpdeskData::tickets())['active'] }}</span>
+            <span class="nav-badge">{{ $activeCount }}</span>
           </a>
 
           <span class="nav-label">Administración</span>
-          <a class="nav-item" href="{{ route('tickets.index') }}">
-            <i data-lucide="users"></i>
-            <span>Solicitantes</span>
+          <a class="nav-item {{ ($active ?? '') === 'categories' ? 'is-active' : '' }}" href="{{ route('categories.index') }}" @if(($active ?? '') === 'categories') aria-current="page" @endif>
+            <i data-lucide="folder"></i>
+            <span>Categorías</span>
           </a>
           <a class="nav-item" href="{{ route('tickets.index', ['technician' => 'unassigned']) }}">
             <i data-lucide="wrench"></i>
@@ -59,10 +68,10 @@
 
         <div class="sidebar-footer">
           <div class="sidebar-user">
-            <span class="avatar">{{ mb_strtoupper(mb_substr(session('helpdesk.user.name', 'U'), 0, 1)) }}</span>
+            <span class="avatar">{{ mb_strtoupper(mb_substr($currentUser->name, 0, 1)) }}</span>
             <div class="sidebar-user-info">
-              <p class="sidebar-user-name">{{ session('helpdesk.user.name') }}</p>
-              <p class="sidebar-user-role">{{ session('helpdesk.user.role') }}</p>
+              <p class="sidebar-user-name">{{ $currentUser->name }}</p>
+              <p class="sidebar-user-role">{{ $roleLabel }}</p>
             </div>
             <form action="{{ route('logout') }}" method="POST">
               @csrf
@@ -95,7 +104,7 @@
               </div>
             </form>
 
-            <a class="btn btn--primary btn--sm" href="{{ route('tickets.index', ['new' => 1]) }}">
+            <a class="btn btn--primary btn--sm" href="{{ route('tickets.create') }}">
               <i data-lucide="plus"></i><span class="btn-label">Nueva solicitud</span>
             </a>
 
@@ -103,17 +112,17 @@
 
             <div class="user-menu">
               <button type="button" class="user-chip" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
-                <span class="avatar">{{ mb_strtoupper(mb_substr(session('helpdesk.user.name', 'U'), 0, 1)) }}</span>
+                <span class="avatar">{{ mb_strtoupper(mb_substr($currentUser->name, 0, 1)) }}</span>
                 <span class="user-chip-meta">
-                  <span class="user-chip-name">{{ session('helpdesk.user.name') }}</span>
-                  <span class="user-chip-role">{{ session('helpdesk.user.role') }}</span>
+                  <span class="user-chip-name">{{ $currentUser->name }}</span>
+                  <span class="user-chip-role">{{ $roleLabel }}</span>
                 </span>
                 <i data-lucide="chevron-down"></i>
               </button>
               <div class="dropdown" id="user-dropdown" hidden>
                 <div class="dropdown-header">
-                  <p class="dropdown-name">{{ session('helpdesk.user.name') }}</p>
-                  <p class="dropdown-mail">{{ session('helpdesk.user.email') }}</p>
+                  <p class="dropdown-name">{{ $currentUser->name }}</p>
+                  <p class="dropdown-mail">{{ $currentUser->email }}</p>
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
                   @csrf

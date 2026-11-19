@@ -4,7 +4,7 @@
 
 @section('content')
   @php
-    $tickets = \App\Support\HelpdeskData::tickets();
+    $heroStats = $heroStats ?? ['tickets' => 0, 'technicians' => 0, 'categories' => 0];
   @endphp
 
   <div class="login-shell">
@@ -51,15 +51,15 @@
 
       <div class="login-aside-footer">
         <div>
-          <p class="login-stat-value">{{ count($tickets) }}</p>
+          <p class="login-stat-value">{{ $heroStats['tickets'] }}</p>
           <p class="login-stat-label">Solicitudes gestionadas</p>
         </div>
         <div>
-          <p class="login-stat-value">{{ count(\App\Support\HelpdeskData::technicians()) }}</p>
+          <p class="login-stat-value">{{ $heroStats['technicians'] }}</p>
           <p class="login-stat-label">Técnicos en el equipo</p>
         </div>
         <div>
-          <p class="login-stat-value">{{ count(\App\Support\HelpdeskData::categories()) }}</p>
+          <p class="login-stat-value">{{ $heroStats['categories'] }}</p>
           <p class="login-stat-label">Categorías de soporte</p>
         </div>
       </div>

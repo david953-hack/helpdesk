@@ -2,8 +2,11 @@
 
 namespace App\Support;
 
+use App\Models\Category;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 
 class HelpdeskData
 {
@@ -33,12 +36,23 @@ class HelpdeskData
 
     public static function technicians(): array
     {
+        if (Schema::hasTable('users')) {
+            return User::query()
+                ->whereIn('role', ['admin', 'tecnico'])
+                ->orderBy('name')
+                ->get()
+                ->map(fn (User $user) => [
+                    'id' => (string) $user->id,
+                    'name' => $user->name,
+                    'specialty' => $user->role === 'admin' ? 'Administración' : 'Soporte técnico',
+                    'status' => 'Activo',
+                ])
+                ->all();
+        }
+
         return [
             ['id' => 'tech_1', 'name' => 'Sofía Ramírez', 'specialty' => 'Redes y conectividad', 'status' => 'Activo'],
             ['id' => 'tech_2', 'name' => 'Diego Torres', 'specialty' => 'Soporte de software', 'status' => 'Activo'],
-            ['id' => 'tech_3', 'name' => 'Valeria Gómez', 'specialty' => 'Hardware y equipos', 'status' => 'Activo'],
-            ['id' => 'tech_4', 'name' => 'Andrés Molina', 'specialty' => 'Accesos y cuentas', 'status' => 'Activo'],
-            ['id' => 'tech_5', 'name' => 'Lucía Fernández', 'specialty' => 'Soporte general', 'status' => 'Inactivo'],
         ];
     }
 
@@ -93,7 +107,12 @@ class HelpdeskData
 
     public static function categoryName(?string $id): string
     {
-        return self::nameFor(self::categories(), $id);
+        $name = self::nameFor(self::categories(), $id);
+        if ($name !== 'No disponible') {
+            return $name;
+        }
+
+        return Schema::hasTable('categories') ? (Category::find($id)?->name ?? 'No disponible') : 'No disponible';
     }
 
     public static function categoryColor(?string $id): string
@@ -104,12 +123,19 @@ class HelpdeskData
             }
         }
 
-        return '#8b919c';
+        $palette = ['#5b5bd6', '#4f7df3', '#1a9c6b', '#e08a00', '#d9603b'];
+
+        return $palette[abs(crc32((string) $id)) % count($palette)];
     }
 
     public static function userName(?string $id): string
     {
-        return self::nameFor(self::users(), $id);
+        $name = self::nameFor(self::users(), $id);
+        if ($name !== 'No disponible') {
+            return $name;
+        }
+
+        return Schema::hasTable('users') ? (User::find($id)?->name ?? 'No disponible') : 'No disponible';
     }
 
     public static function userDepartment(?string $id): string
@@ -120,12 +146,29 @@ class HelpdeskData
             }
         }
 
-        return '—';
+        if (! Schema::hasTable('users')) {
+            return '—';
+        }
+
+        return match (User::find($id)?->role) {
+            'admin' => 'Administración',
+            'tecnico' => 'Soporte técnico',
+            'usuario' => 'Usuario',
+            default => '—',
+        };
     }
 
     public static function technicianName(?string $id): string
     {
-        return $id ? self::nameFor(self::technicians(), $id) : 'Sin asignar';
+        if (! $id) {
+            return 'Sin asignar';
+        }
+
+        $name = self::nameFor(self::technicians(), $id);
+
+        return $name !== 'No disponible'
+            ? $name
+            : (Schema::hasTable('users') ? (User::find($id)?->name ?? 'Sin asignar') : 'Sin asignar');
     }
 
     public static function stats(array $tickets): array

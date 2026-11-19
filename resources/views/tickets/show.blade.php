@@ -65,56 +65,6 @@
           </div>
         </div>
 
-        <div class="card card--flush">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title">Conversación</h3>
-              <p class="card-subtitle" id="comments-count">
-                {{ count($ticket['comments']) === 0 ? 'Sin comentarios todavía' : count($ticket['comments']) . ' comentario' . (count($ticket['comments']) === 1 ? '' : 's') }}
-              </p>
-            </div>
-          </div>
-
-          <div class="comment-list">
-            @forelse ($ticket['comments'] as $comment)
-              <div class="comment">
-                @include('partials.avatar', ['name' => $comment['authorName']])
-                <div class="comment-body">
-                  <div class="comment-head">
-                    <span class="comment-author">{{ $comment['authorName'] }}</span>
-                    <span class="comment-role">{{ $comment['role'] }}</span>
-                    <span class="comment-time">{{ \Carbon\Carbon::parse($comment['createdAt'])->locale('es')->diffForHumans() }}</span>
-                  </div>
-                  <p class="comment-text">{{ $comment['message'] }}</p>
-                </div>
-              </div>
-            @empty
-              <p class="comment-empty">Todavía no hay comentarios. Inicia la conversación.</p>
-            @endforelse
-          </div>
-
-          @if ($errors->has('message'))
-            <div class="info-banner" style="margin: 0 20px" role="alert">
-              <i data-lucide="alert-circle"></i>
-              <span>{{ $errors->first('message') }}</span>
-            </div>
-          @endif
-
-          <form class="comment-form" action="{{ route('tickets.comments.store', $ticket['id']) }}" method="POST">
-            @csrf
-            <div class="field" style="width: 100%">
-              <label class="sr-only" for="comment-message">Comentario</label>
-              <textarea class="textarea" id="comment-message" name="message" rows="3" placeholder="Escribe un comentario o una actualización…" required>{{ old('message') }}</textarea>
-            </div>
-            <div class="comment-form-actions">
-              <span class="comment-form-hint">Los comentarios quedan registrados en el historial.</span>
-              <button type="submit" class="btn btn--primary btn--sm">
-                <i data-lucide="send"></i>Enviar comentario
-              </button>
-            </div>
-          </form>
-        </div>
-
         <div class="card">
           <div class="card-header">
             <div>
@@ -277,11 +227,6 @@
                 @endforeach
               </select>
               @error('technician_id')<span class="field-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="field">
-              <label for="edit-due">Fecha límite</label>
-              <input class="input" id="edit-due" name="due_date" type="date" value="{{ old('due_date', $ticket['dueDate'] ? \Carbon\Carbon::parse($ticket['dueDate'])->format('Y-m-d') : '') }}" />
-              @error('due_date')<span class="field-error">{{ $message }}</span>@enderror
             </div>
           </div>
           <div class="modal-footer">

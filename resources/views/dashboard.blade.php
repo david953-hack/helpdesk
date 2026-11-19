@@ -12,7 +12,7 @@
       <a class="btn btn--secondary" href="{{ route('tickets.export') }}">
         <i data-lucide="bar-chart-3"></i>Ver reportes
       </a>
-      <a class="btn btn--primary" href="{{ route('tickets.index', ['new' => 1]) }}">
+      <a class="btn btn--primary" href="{{ route('tickets.create') }}">
         <i data-lucide="plus"></i>Nueva solicitud
       </a>
     </div>
@@ -36,6 +36,28 @@
         <p class="stat-foot">{{ $card['foot'] }}</p>
       </article>
     @endforeach
+  </section>
+
+  <section class="card" style="margin-top: 18px" aria-label="Contadores por estado">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Contadores por estado</h3>
+        <p class="card-subtitle">Total de solicitudes en cada fase del flujo</p>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="{{ route('tickets.index') }}">
+        Ver solicitudes<i data-lucide="arrow-right"></i>
+      </a>
+    </div>
+    <div class="card-body">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        @foreach ($stats['byStatus'] as $status => $count)
+          <span class="btn btn--ghost btn--sm" style="pointer-events: none; gap: 8px">
+            @include('partials.status-badge', ['status' => $status])
+            <strong>{{ $count }}</strong>
+          </span>
+        @endforeach
+      </div>
+    </div>
   </section>
 
   <div class="grid-2 grid-2--uneven">

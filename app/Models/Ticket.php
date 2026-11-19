@@ -18,8 +18,6 @@ class Ticket extends Model
         'assigned_to',
     ];
 
-    public $timestamps = false;
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
