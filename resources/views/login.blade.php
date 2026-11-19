@@ -132,7 +132,7 @@
         </form>
 
         <div class="demo-card">
-          <p class="demo-title"><i data-lucide="sparkles"></i>Acceso de demostración</p>
+          <p class="demo-title"><i data-lucide="sparkles"></i>Acceso Rapido de demostración</p>
           <div class="demo-accounts">
             <button
               type="button"
@@ -149,12 +149,12 @@
             <button
               type="button"
               class="demo-account"
-              onclick="document.getElementById('login-email').value='agente@helpdesk.com';document.getElementById('login-password').value='agente123';"
+              onclick="document.getElementById('login-email').value='tecnico@helpdesk.com';document.getElementById('login-password').value='tecnico123';"
             >
               <span class="demo-account-icon"><i data-lucide="wrench"></i></span>
               <span class="demo-account-text">
                 <span class="demo-account-name">Técnico de soporte</span>
-                <span class="demo-account-mail">agente@helpdesk.com / agente123</span>
+                <span class="demo-account-mail">tecnico@helpdesk.com / tecnico123</span>
               </span>
               <i data-lucide="arrow-up-right"></i>
             </button>
