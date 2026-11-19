@@ -20,9 +20,9 @@ class HelpdeskSeeder extends Seeder
 
         foreach ([
             ['name' => 'Administrador', 'email' => 'admin@helpdesk.com', 'password' => 'admin123', 'role' => 'admin'],
-            ['name' => 'Sofía Ramírez', 'email' => 'agente@helpdesk.com', 'password' => 'agente123', 'role' => 'tecnico'],
+            ['name' => 'David Aguillon', 'email' => 'tecnico@helpdesk.com', 'password' => 'tecnico123', 'role' => 'tecnico'],
             ['name' => 'Laura Martín', 'email' => 'laura@helpdesk.com', 'password' => 'usuario123', 'role' => 'usuario'],
-            ['name' => 'Carlos Ruiz', 'email' => 'carlos@helpdesk.com', 'password' => 'usuario123', 'role' => 'usuario'],
+            ['name' => 'Sebastian Rodríguez', 'email' => 'sebastian@helpdesk.com', 'password' => 'usuario123', 'role' => 'usuario'],
         ] as $account) {
             User::firstOrCreate(
                 ['email' => $account['email']],
